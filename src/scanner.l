@@ -64,7 +64,7 @@ NUM         {DIGITO}+
 ")"     {return T_RPAR;}
 "["     {return T_LCOLCHETE;}
 "]"     {return T_RCOLCHETE;}
-"{"     {return T_LCHAVE;}"
+"{"     {return T_LCHAVE;}
 "}"     {return T_RCHAVE;}
 "/*"    {return T_COMENTARIO_INICIO;}
 "*/"    {return T_COMENTARIO_FIM;}
