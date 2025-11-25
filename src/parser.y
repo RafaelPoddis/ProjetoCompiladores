@@ -13,7 +13,7 @@
 
 %union {
     int     ival;
-    char*   sval;
+    char    *sval;
 }
 
 %token<ival> T_INT
@@ -29,7 +29,7 @@
 
 %left T_MAIS T_MENOS
 
-%%
+/* %%
     programa: 
         | declaration_list
         ;
@@ -38,4 +38,4 @@
         declaration_list declaration
         | declaration
         ;
-%%
+%% */
