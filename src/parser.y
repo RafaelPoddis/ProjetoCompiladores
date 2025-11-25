@@ -1,3 +1,7 @@
+/* -------------------------------------------------- */
+/* -------- Todo código abaixo está de acordo ------- */
+/* - com o Apendice A do livro do Kenneth C. Louden - */
+/* -------------------------------------------------- */
 %{
     #include <stdio.h>
     #include <stdlib.h>
@@ -11,16 +15,21 @@
     void yyerror(const char* s);
 %}
 
+/* ------------------------------------- */
+/* - Declaração dos tipos de variaveis - */
+/* ------------------------------------- */
 %union {
     int     ival;
     char*   sval;
 }
 
-%token<ival> T_INT
-%token<sval> T_STRING
+/* ------------------------------------- */
+/* ------- Declaração dos tokens ------- */
+/* ------------------------------------- */
+%token<ival> T_INT NUM
+%token<sval> ID
 
-%token T_IF T_ELSE T_WHILE T_RETURN T_VOID T_INPUT T_OUTPUT
-%token ID NUM
+%token T_IF T_ELSE T_WHILE T_RETURN T_VOID
 %token T_MAIS T_MENOS T_VEZES T_DIVIDIDO
 %token T_MENOR T_MAIOR T_MENOR_IGUAL T_MAIOR_IGUAL T_IGUALDADE T_DIFERENTE
 %token T_RECEBE
@@ -28,7 +37,11 @@
 %token T_LPAR T_RPAR T_LCOLCHETE T_RCOLCHETE T_LCHAVE T_RCHAVE
 
 %left T_MAIS T_MENOS
+%left T_VEZES T_DIVIDIDO
 
+/* ------------------------------------- */
+/* ------- Gramática Transcrita -------- */
+/* ------------------------------------- */
 %%
     programa: 
         | declaration_list
