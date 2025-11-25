@@ -1,0 +1,50 @@
+Arquivos *.tab.c e *.tab.h:
+    - Arquivos gerados pelo comando "bison -d [FILENAME].y"
+    - *.tab.c contém o código do parser com as regras sintáticas
+    - *.tab.h é o header a ser incluido no código do scanner, permitindo a "comunicação" entre o Flex e o Bison
+
+Tipos do yylval:
+    %union {
+        int     ival;       // Variável para inteiros
+        float   fval;       // Variável para float
+    }
+    - Definem tipos de variáveis que armazenarão os valores de certos tipos de tokens
+    - Isso é feito posteriormente na declaração dos tokens:
+        %token<ival> T_INT
+        %token<fval> T_FLOAT
+        %token T_MAIS T_MENOS T_LPAR T_RPAR
+        %token T_NEWLINE
+    - Perceba como T_INT e T_FLOAT recebem <ival> e <fval>
+        - Quando esses tokens forem detectados, eles armazenarão valores
+        - Já quando os demais (T_MAIS T_MENOS T_LPAR T_RPAR T_NEWLINE) forem detectados, eles armazenarão apenas o token detectado
+
+Ordem de precedência:
+    %left T_MAIS T_MENOS
+    - Dita a ordem que os operadores devem ser tratados, para evitar ambiguidade
+    - Nessa linha, é declarado que as operações de soma e subtração terão a mesma precedência e serão lidas da esquerda para a direita
+    - Ex: 4 + 3 - 2
+        - Se não houvéssemos declarado a precedência, o compilador não saberia interpretar se a operação seria (4+3)-2 ou 4+(3-2)
+        - Como definimos a leitura da esquerda para a direita (%left), resolvemos a ambiguidade e o compilador interpretará como (4+3)-2
+    
+    %left T_MAIS T_MENOS
+    %left T_MULT
+    - As ordens de precedência são em ordem crescente de acordo com a linha (portanto, linha mais abaixo = maior precedência)
+    - Aqui estamos definindo que operações de multiplicação tem maior precedência que soma e subtração
+    - Ex: 4 + 3 * 2 
+        - A operação será lida como 4+(3*2)
+        - Como ainda estamos tratanto de leitura à esquerda, a operação 3 + 5 * 7 * 9 será lida como 3+(5*7)*9, e depois 3+(35*9) (ou 3+((5*7)*9)))
+
+    %left T_MAIS
+    %right T_POW
+    - Aqui definimos que T_POW tem leitura da direita para a esquerda (para realizar operações como potência de potência), e tem maior precedência do que a soma
+    - Ex: 3 + 5 ^ 4 ^ 9
+        - A operação será lida como 3+5^(4^9), e depois como 3+(5^(4^9))
+        - Podemos representar essa leitura como uma árvore sintática:
+                   +
+                  /  \
+                 2    ^
+                     / \
+                    3   ^
+                      /   \
+                     2     1
+

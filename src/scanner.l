@@ -41,8 +41,6 @@ NUM         {DIGITO}+
 "return"    { return T_RETURN; }
 "int"       { return T_INT; }
 "void"      { return T_VOID; }
-"input"     { return T_INPUT; }
-"output"    { return T_OUTPUT; }
 
 /* ---------------------------------------- */
 /* ---------- Simbolos Especiais ---------- */
@@ -64,7 +62,7 @@ NUM         {DIGITO}+
 ")"     {return T_RPAR;}
 "["     {return T_LCOLCHETE;}
 "]"     {return T_RCOLCHETE;}
-"{"     {return T_LCHAVE;}"
+"{"     {return T_LCHAVE;}
 "}"     {return T_RCHAVE;}
 "/*"    {return T_COMENTARIO_INICIO;}
 "*/"    {return T_COMENTARIO_FIM;}
