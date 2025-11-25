@@ -41,8 +41,6 @@ NUM         {DIGITO}+
 "return"    { return T_RETURN; }
 "int"       { return T_INT; }
 "void"      { return T_VOID; }
-"input"     { return T_INPUT; }
-"output"    { return T_OUTPUT; }
 
 /* ---------------------------------------- */
 /* ---------- Simbolos Especiais ---------- */
