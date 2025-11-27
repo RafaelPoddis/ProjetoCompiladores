@@ -64,8 +64,6 @@ NUM         {DIGITO}+
 "]"     {return T_RCOLCHETE;}
 "{"     {return T_LCHAVE;}
 "}"     {return T_RCHAVE;}
-"/*"    {return T_COMENTARIO_INICIO;}
-"*/"    {return T_COMENTARIO_FIM;}
 
     /* ---------------------------------------- */
     /* ----------- Tokens ID e NUM ------------ */
@@ -80,4 +78,22 @@ NUM         {DIGITO}+
     erro_lexico(yytext);
     exit(1);
 }
+
+    /* ---------------------------------------- */
+    /* ---------- Comentários em C ------------ */
+    /* ---------------------------------------- */
+
+"/*" {
+    char c;
+    int commentLine = lineno;
+    char p = '\0';
+    do {
+        c = input();
+        if (c == YYEOF) { ... }
+        if (c == '\n') lineno++;
+        if (p == '*' && c == '/') break;
+        p = c;
+    } while (1);
+}
+
 %%
