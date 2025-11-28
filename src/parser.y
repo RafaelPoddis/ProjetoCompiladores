@@ -2,17 +2,24 @@
 /* -------- Todo código abaixo está de acordo ------- */
 /* - com o Apendice A do livro do Kenneth C. Louden - */
 /* -------------------------------------------------- */
+
+%expect 1
+
 %{
     #include <stdio.h>
     #include <stdlib.h>
     #include <string.h>
+    #include "stdarg.h"
 
     extern int num_linha;
     extern int yylex();
     extern int yyparse();
-    extern FILE* yyin;
+    // extern FILE* yyin;
 
-    void yyerror(const char* s);
+    void yyerror(const char* s) {
+        fprintf(stderr, "ERRO SINTATICO: %s - LINHA: %d\n", s, num_linha);
+        exit(EXIT_FAILURE);
+    }
 %}
 
 /* ------------------------------------- */

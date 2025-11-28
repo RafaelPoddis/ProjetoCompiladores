@@ -85,16 +85,16 @@ NUM         {DIGITO}+
 
 "/*" {
     char c;
-    int commentLine = lineno;
+    int commentLine = num_linha;
     char p = '\0';
     do {
         c = input();
-        if (c == YYEOF) {
+        if (c == 0) {
             printf("ERRO LÉXICO: Comentário não encerrado ('/*'). LINHA: %d\n", commentLine);
             exit(EXIT_FAILURE);
         }
         if (c == '\n')
-            lineno++;
+            num_linha++;
         if (p == '*' && c == '/')
             break;
         p = c;
