@@ -68,8 +68,8 @@ NUM         {DIGITO}+
     /* ---------------------------------------- */
     /* ----------- Tokens ID e NUM ------------ */
     /* ---------------------------------------- */
-{ID}    { yylval.sval = strdup(yytext); return T_ID; }
-{NUM}   { yylval.ival = atoi(yytext); return T_NUM; }
+{ID}    { yylval.sval = strdup(yytext); return ID; }
+{NUM}   { yylval.ival = atoi(yytext); return NUM; }
 
     /* ---------------------------------------- */
     /* ------------- Erro Léxico -------------- */
@@ -89,9 +89,14 @@ NUM         {DIGITO}+
     char p = '\0';
     do {
         c = input();
-        if (c == YYEOF) { ... }
-        if (c == '\n') lineno++;
-        if (p == '*' && c == '/') break;
+        if (c == YYEOF) {
+            printf("ERRO LÉXICO: Comentário não encerrado ('/*'). LINHA: %d\n", commentLine);
+            exit(EXIT_FAILURE);
+        }
+        if (c == '\n')
+            lineno++;
+        if (p == '*' && c == '/')
+            break;
         p = c;
     } while (1);
 }
