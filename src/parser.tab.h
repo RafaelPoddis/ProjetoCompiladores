@@ -46,14 +46,14 @@ extern int yydebug;
    /* Put the tokens into the symbol table, so that GDB and other debuggers
       know about them.  */
    enum yytokentype {
-     T_INT = 258,
-     NUM = 259,
-     ID = 260,
-     T_IF = 261,
-     T_ELSE = 262,
-     T_WHILE = 263,
-     T_RETURN = 264,
-     T_VOID = 265,
+     NUM = 258,
+     ID = 259,
+     T_IF = 260,
+     T_ELSE = 261,
+     T_WHILE = 262,
+     T_RETURN = 263,
+     T_VOID = 264,
+     T_INT = 265,
      T_MAIS = 266,
      T_MENOS = 267,
      T_VEZES = 268,

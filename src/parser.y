@@ -33,10 +33,10 @@
 /* ------------------------------------- */
 /* ------- Declaração dos tokens ------- */
 /* ------------------------------------- */
-%token<ival> T_INT NUM
+%token<ival> NUM
 %token<sval> ID
 
-%token T_IF T_ELSE T_WHILE T_RETURN T_VOID
+%token T_IF T_ELSE T_WHILE T_RETURN T_VOID T_INT
 %token T_MAIS T_MENOS T_VEZES T_DIVIDIDO
 %token T_MENOR T_MAIOR T_MENOR_IGUAL T_MAIOR_IGUAL T_IGUALDADE T_DIFERENTE
 %token T_RECEBE
