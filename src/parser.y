@@ -54,7 +54,7 @@
 %left T_MAIS T_MENOS
 %left T_VEZES T_DIVIDIDO
 
-%type <node> addop mulop term factor expression var simple_expression relop
+%type <node> addop mulop term factor expression var simple_expression relop additive_expression
 
 /* ------------------------------------- */
 /* ------- Gramática Transcrita -------- */
@@ -163,24 +163,39 @@
         T_MENOR_IGUAL
         | T_MENOR
         | T_MAIOR
-        | T_MAIOR_IGUAL
+        | T_MAIOR_IGUAL{ $$ = createOpNode('+', $1, $3); }
         | T_IGUALDADE
         | T_DIFERENTE
         ;
 
+    /* addop pode ser do tipo T_MAIS ou T_MENOS */
+    /* Verifica o tipo e cria um nó de soma ou subtração */
     additive_expression:
-        additive_expression addop term
-        | term
+        additive_expression addop term  {
+            if ($2 == T_MAIS) 
+                $$ = createOpNode('+', $1, $3); 
+            else 
+                $$ = createOpNode('-', $1, $3);
+            }
+        /*  Caso base, quando o termo é apenas um número isolado */
+        | term  { $$ = createValNode($1); }
         ;
 
     addop:
-        T_MAIS      { $$ = createOpNode('+', $1, $3); }
-        | T_MENOS    { $$ = createOpNode('-', $1, $3); }
+        T_MAIS
+        | T_MENOS
         ;
 
+    /* addop pode ser do tipo T_VEZES ou T_DIVIDIDO */
+    /* Verifica o tipo e cria um nó de multiplicação ou divisão */
     term:
-        term mulop factor { $$ = createOpNode($2, $1, $3); }
-        | factor
+        term mulop factor {
+            if ($2 == T_VEZES) 
+                $$ = createOpNode('*', $1, $3); 
+            else 
+                $$ = createOpNode('/', $1, $3);
+        }
+        | factor    { $$ = createValNode($1); }
         ;
 
     mulop:
