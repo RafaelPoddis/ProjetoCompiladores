@@ -10,6 +10,7 @@
     #include <stdlib.h>
     #include <string.h>
     #include "stdarg.h"
+    #include "AAS.h"
 
     extern int num_linha;
     extern int yylex();
@@ -20,6 +21,12 @@
         fprintf(stderr, "ERRO SINTATICO: %s - LINHA: %d\n", s, num_linha);
         exit(EXIT_FAILURE);
     }
+
+    /* Variáveis globais para o "Canvas" de impressão */
+    #define MAX_LINES 20
+    #define MAX_WIDTH 80
+    char canvas[MAX_LINES][MAX_WIDTH];
+
 %}
 
 /* ------------------------------------- */
@@ -28,6 +35,7 @@
 %union {
     int     ival;
     char    *sval;
+    struct AST* node;
 }
 
 /* ------------------------------------- */
@@ -45,6 +53,8 @@
 
 %left T_MAIS T_MENOS
 %left T_VEZES T_DIVIDIDO
+
+%type <node> addop mulop term factor expression var simple_expression relop
 
 /* ------------------------------------- */
 /* ------- Gramática Transcrita -------- */
@@ -164,12 +174,12 @@
         ;
 
     addop:
-        T_MAIS
-        | T_MENOS
+        T_MAIS      { $$ = createOpNode('+', $1, $3); }
+        | T_MENOS    { $$ = createOpNode('-', $1, $3); }
         ;
 
     term:
-        term mulop factor
+        term mulop factor { $$ = createOpNode($2, $1, $3); }
         | factor
         ;
 
@@ -182,7 +192,7 @@
         T_LPAR expression T_RPAR
         | var
         | call
-        | NUM
+        | NUM   { $$ = createValNode($1); }
         ;
 
     call:
