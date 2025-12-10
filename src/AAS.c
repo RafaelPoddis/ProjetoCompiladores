@@ -3,6 +3,8 @@
 #include <string.h>
 #include "AAS.h"
 
+extern int num_linha;
+
 /* Variável de indentação para impressão */
 static int indent = 0;
 
@@ -15,7 +17,7 @@ AST* newStmtNode(StmtType kind) {
     node->irmao = NULL;
     node->type = TYPE_STMT;
     node->kind.stmt = kind;
-    node->linha = 0; 
+    node->linha = num_linha; 
     return node;
 }
 
@@ -27,6 +29,7 @@ AST* newExpNode(ExpType kind) {
     node->type = TYPE_EXP;
     node->kind.exp = kind;
     node->varType = Void;
+    node->linha = num_linha;
     return node;
 }
 
@@ -35,12 +38,14 @@ AST* createOpNode(int op, AST* left, AST* right) {
     node->filho[0] = left;
     node->filho[1] = right;
     node->attr.oper = op;
+    node->linha = num_linha;
     return node;
 }
 
 AST* createValNode(float val) {
     AST* node = newExpNode(ConstK);
     node->attr.val = (int)val;
+    node->linha = num_linha;
     return node;
 }
 
@@ -48,6 +53,7 @@ AST* createIdNode(char* name) {
     AST* node = newExpNode(IdK);
     if (name != NULL) node->name = strdup(name);
     else node->name = NULL;
+    node->linha = num_linha;
     return node;
 }
 

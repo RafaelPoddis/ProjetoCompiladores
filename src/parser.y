@@ -3,7 +3,7 @@
 /* - com o Apendice A do livro do Kenneth C. Louden - */
 /* -------------------------------------------------- */
 
-%error-verbose
+%define parse.error verbose
 %expect 1
 
 %{
@@ -11,12 +11,15 @@
     #include <stdlib.h>
     #include <string.h>
     #include "AAS.h"
+    #include "TabSimbolos.h"
 
     extern int num_linha;
     extern int yylex();
     extern int yyparse();
     extern FILE* yyin;
     extern char* yytext; 
+
+    AST* raiz = NULL;
 
     void yyerror(const char* s) {
         /* s contém a mensagem automática do Bison */
@@ -95,13 +98,8 @@
 /* ------------------------------------- */
 %%
     program: 
-        declaration_list
-        {
-            printf("\n--- INICIO DA ARVORE ---\n");
-            printTree($1); 
-            printf("--- FIM DA ARVORE ---\n");
-        }
-        ;
+        declaration_list    { raiz = $1; }
+    ;
     
     declaration_list:
         declaration_list declaration
@@ -410,8 +408,27 @@ int main(int argc, char** argv) {
     printf("Iniciando analise sintatica\n");
     if (yyparse() == 0) {
         printf("Gramatica aceita.\n");
+
+        // Análise Semântica
+        printf("\nIniciando análise semântica\n");
+        Tabela* globalTable = criaTabela(NULL);
+        verificaSemantica(raiz, globalTable);
+        printf("Análise semântica concluída.\n");
+        
+       // Print Symbol Table
+        printf("\n=== Tabela de Símbolos ===\n");
+        printTabela(globalTable, 0);
+
+        // Imprime a AST
+        printf("\n=== Árvore Sintática Abstrata ===\n");
+        printTree(raiz);
+        
+        // Libera memória
+        liberaTabela(globalTable);
+        freeAST(raiz);
+
     } else {
-        printf("Falha na analise sintatica.\n");
+        printf("Falha na análise sintática.\n");
     }
     
     if (yyin) fclose(yyin);
