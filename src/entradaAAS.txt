@@ -2,13 +2,14 @@ int x;
 int y;
 int a;
 int b;
+int x;
 void main(void) {
     int c;
     ;
     x = (1 + (4 * 2));
     y = 20;
-    x = 10;
-    
+    p = 10;
+    x = 10/2-2;
     if (x < (2+3)) {
         x = x + 1;
     } else {

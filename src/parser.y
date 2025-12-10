@@ -1,9 +1,9 @@
 /* -------------------------------------------------- */
-/* -------- Todo código abaixo está de acordo ------- */
+/* -------- Todo código abaixo esta de acordo ------- */
 /* - com o Apendice A do livro do Kenneth C. Louden - */
 /* -------------------------------------------------- */
 
-%define parse.error verbose
+%error-verbose
 %expect 1
 
 %{
@@ -22,14 +22,14 @@
     AST* raiz = NULL;
 
     void yyerror(const char* s) {
-        /* s contém a mensagem automática do Bison */
+        /* s contém a mensagem automatica do Bison */
         fprintf(stderr, "ERRO SINTATICO: %s\n", s);
         fprintf(stderr, " -> Ocorreu na linha %d, perto de: '%s'\n", num_linha, yytext);
         exit(EXIT_FAILURE); 
     }
 
 
-    /* Variáveis globais para o "Canvas" de impressão */
+    /* Variaveis globais para o "Canvas" de impressão */
     #define MAX_LINES 20
     #define MAX_WIDTH 80
     char canvas[MAX_LINES][MAX_WIDTH];
@@ -94,7 +94,7 @@
 %type <node> expression var simple_expression additive_expression term factor call args arg_list
 
 /* ------------------------------------- */
-/* ------- Gramática Transcrita -------- */
+/* ------- Gramatica Transcrita -------- */
 /* ------------------------------------- */
 %%
     program: 
@@ -409,18 +409,19 @@ int main(int argc, char** argv) {
     if (yyparse() == 0) {
         printf("Gramatica aceita.\n");
 
-        // Análise Semântica
-        printf("\nIniciando análise semântica\n");
+        // Analise Semântica
+        printf("\nIniciando analise semantica\n");
         Tabela* globalTable = criaTabela(NULL);
         verificaSemantica(raiz, globalTable);
-        printf("Análise semântica concluída.\n");
+        verificaMain(raiz);
+        printf("Analise semantica concluida.\n");
         
        // Print Symbol Table
-        printf("\n=== Tabela de Símbolos ===\n");
+        printf("\n=== Tabela de Simbolos ===\n");
         printTabela(globalTable, 0);
 
         // Imprime a AST
-        printf("\n=== Árvore Sintática Abstrata ===\n");
+        printf("\n=== Arvore Sintatica Abstrata ===\n");
         printTree(raiz);
         
         // Libera memória
@@ -428,7 +429,7 @@ int main(int argc, char** argv) {
         freeAST(raiz);
 
     } else {
-        printf("Falha na análise sintática.\n");
+        printf("Falha na analise sintatica.\n");
     }
     
     if (yyin) fclose(yyin);
