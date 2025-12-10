@@ -7,6 +7,7 @@
 %{
     #include <stdio.h>
     #include <stdlib.h>
+    #include <string.h>
     #include "parser.tab.h"
 
     #define YY_DECL int yylex() // Define como a função yylex deve ser declarada
@@ -71,13 +72,6 @@ NUM         {DIGITO}+
 {ID}    { yylval.sval = strdup(yytext); return ID; }
 {NUM}   { yylval.ival = atoi(yytext); return NUM; }
 
-    /* ---------------------------------------- */
-    /* ------------- Erro Léxico -------------- */
-    /* ---------------------------------------- */
-. {
-    erro_lexico(yytext);
-    exit(1);
-}
 
     /* ---------------------------------------- */
     /* ---------- Comentários em C ------------ */
@@ -99,6 +93,14 @@ NUM         {DIGITO}+
             break;
         p = c;
     } while (1);
+}
+
+    /* ---------------------------------------- */
+    /* ------------- Erro Léxico -------------- */
+    /* ---------------------------------------- */
+. {
+    erro_lexico(yytext);
+    exit(1);
 }
 
 %%

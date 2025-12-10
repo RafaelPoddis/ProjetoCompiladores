@@ -1,31 +1,51 @@
 #ifndef AAS_H
 #define AAS_H
 
-/* Tipo de nó: operador ou valor */
-typedef enum { TYPE_OP, TYPE_VAL } NodeType;
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-/* Estrutura da árvore sintática abstrata */
+
+#define LE_OP 1  
+#define GE_OP 2  
+#define EQ_OP 3  
+#define NE_OP 4  
+
+typedef enum {TYPE_STMT, TYPE_EXP } NodeType;
+typedef enum {IfK, WhileK, AssignK, ReturnK, VarDecK, FunDecK, CallK, CompoundK } StmtType;
+typedef enum {OpK, ConstK, IdK } ExpType;
+typedef enum {Void, Integer, Boolean } VarType;
+
 typedef struct AST {
-    NodeType type;
+    struct AST* filho[3]; 
+    struct AST* irmao; 
+    
+    NodeType type;        
+    int linha;            
+
     union {
-        char oper;
-        float value;
-    } data;
-    struct AST *left;
-    struct AST *right;
+        StmtType stmt;
+        ExpType exp;
+    } kind;
+
+    char* name;   
+    union {
+        int oper;
+        int val; 
+    } attr;
+    
+    VarType varType; 
+
 } AST;
 
-/* Funções de criação de nós */
-AST* createOpNode(char op, AST* left, AST* right);
+
+AST* newStmtNode(StmtType kind);
+AST* newExpNode(ExpType kind);
+AST* createOpNode(int op, AST* left, AST* right);
 AST* createValNode(float val);
+AST* createIdNode(char* name);
 
-/* Funções de manipulação da árvore */
-float evalAST(AST* node);
 void freeAST(AST* node);
-
-/* Funções de impressão bonita */
 void printTree(AST* root);
-int getHeight(AST* root);
-void fillBuffer(AST* node, int level, int left, int right);
 
 #endif /* AAS_H */
